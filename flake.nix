@@ -14,7 +14,8 @@
       pkgs = import nixpkgs {inherit system;};
     in {
       devShell = pkgs.mkShell {
-        buildInputs = [
+        buildInputs = with pkgs; [
+          python312Full
           kframework.defaultPackage.${system}
         ];
       };

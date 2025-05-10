@@ -1,29 +1,7 @@
-module ONEPLUS-SYNTAX
-  imports INT-SYNTAX
-  imports STRING-SYNTAX
-  imports LIST
+requires "syntax.k"
 
-  syntax Command ::=  "ONE"  [token]
-                    | "+"  [token]
-                    | "*"  [token]
-                    | "DUPLICATE" [token]
-                    | "/"  [token]
-                    | "\\" [token]
-                    | "^"  [token]
-                    | "<"  [token]
-                    | "." [token]
-                    | "," [token]
-                    | ":" [token]
-                    | ";" [token]
-                    | "#"  [token]
-
-  syntax Commands ::= List{Command,""}
-
-  syntax Comment ::= "[" String "]"
-endmodule
-
-module ONEPLUS
-  imports ONEPLUS-SYNTAX
+module SEMANTICS
+  imports SYNTAX
   imports INT
   imports BOOL
 
