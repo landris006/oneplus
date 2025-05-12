@@ -5,11 +5,16 @@ import sys
 
 def main():
     with open(sys.argv[1], "r") as f:
-        contents = f.read().strip()
+        lines = f.readlines()
 
-    chars = (process(c) for c in list(contents))
+    lines = (process_line(line) for line in lines)
 
-    print(" ".join(chars))
+    print("".join(lines))
+
+
+def process_line(line: str):
+    line = line.strip()
+    return " ".join(process(c) for c in list(line)) + " EOL"
 
 
 def process(c: str):
