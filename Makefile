@@ -8,7 +8,7 @@ run: ${OUT_DIR}
 	@if [ -z "$(input)" ]; then \
 		echo "Usage: make run input=<path_to_file>"; \
 	else \
-		./preprocess.py ${input} | xargs -I{} krun --definition ${OUT_DIR} -cPGM={}; \
+		./preprocess.py ${input} | xargs -I{} krun --definition ${OUT_DIR} -cPGM={} $(krun_args); \
 	fi
 
 clean:

@@ -12,5 +12,5 @@ module UTILS
   rule at(I:Int, _:Command CS:Commands) => at(I -Int 1, CS)
     requires I >Int 0
 
-  syntax Option ::= "None" | Some(Command) [function]
+  syntax Option ::= "None" | Some(Command) // the Rust influence...
 endmodule

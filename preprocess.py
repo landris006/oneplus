@@ -9,7 +9,7 @@ def main():
 
     lines = (process_line(line) for line in lines)
 
-    print("".join(lines))
+    print(" ".join(lines))
 
 
 def process_line(line: str):

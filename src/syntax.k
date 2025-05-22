@@ -5,21 +5,22 @@ module SYNTAX
 
   syntax Command ::=  "ONE" [token]     
                     | "+"  [token]
-                    //| "*"  [token]
-                    //| "DUPLICATE" [token]
-                    //| "/"  [token]
-                    //| "\\" [token]
-                    //| "^"  [token]
-                    //| "<"  [token]
-                    //| "." [token]
-                    //| "," [token]
-                    //| ":" [token]
-                    //| ";" [token]
-                    //| "#"  [token]
+                    | "*"  [token]
+                    | "DUPLICATE" [token]
+                    | "/"  [token]
+                    | "\\" [token]
+                    | "^"  [token]
+                    | "<"  [token]
+                    | "." [token]
+                    | "," [token]
+                    | ":" [token]
+                    | ";" [token]
+                    | "#"  [token]
 
+  syntax CommandOrComment
   syntax Commands ::= List{Command,""}
 
-  syntax Cmd ::= Command | "DONE"
+  syntax Cmd ::= Command
 
   syntax Line ::= Commands "EOL"
   syntax Lines ::= List{Line,""}
