@@ -2,23 +2,24 @@ module SYNTAX
   imports INT-SYNTAX
   imports STRING-SYNTAX
   imports LIST
+  imports ID-SYNTAX
 
-  syntax Command ::=  "ONE" [token]     
-                    | "+"  [token]
-                    | "*"  [token]
-                    | "DUPLICATE" [token]
-                    | "/"  [token]
-                    | "\\" [token]
-                    | "^"  [token]
-                    | "<"  [token]
-                    | "." [token]
-                    | "," [token]
-                    | ":" [token]
-                    | ";" [token]
-                    | "#"  [token]
-                    | "(" String "|" Commands ")" [token]
-
-  syntax CommandOrComment
+  syntax Command ::=  "ONE"
+                    | "+"
+                    | "*"
+                    | "DUPLICATE"
+                    | "/"
+                    | "\\"
+                    | "^"
+                    | "<"
+                    | "."
+                    | ","
+                    | ":"
+                    | ";"
+                    | "#"
+                    | "(" Id "|" Commands ")"
+                    | "(" Id ")"
+  
   syntax Commands ::= List{Command,""}
 
   syntax Cmd ::= Command

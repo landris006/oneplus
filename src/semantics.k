@@ -15,15 +15,17 @@ module SEMANTICS
     <cmd> None </cmd> // The current command to be evaluated
 
     <scopes>
-      <scope multiplicity="*" type="List">
+      <scope multiplicity="*" type="List"> // Starts out empty by default
         <noop> 0 </noop>
         <ptr> 0 </ptr>
         <commands> .Commands </commands>
       </scope>
     </scopes>
-    //<subroutines> .Map </subroutines>
-    //<input> .List </input>
+
+    <subroutines> .Map </subroutines>
     <stack> .List </stack>
+
+    <input> .List </input>
     <output> .List </output>
   </T>
 
@@ -38,7 +40,7 @@ module SEMANTICS
             <ptr> 0 </ptr>
             <commands> CS </commands>
           </scope>
-        ) ...
+        ) // Notice: no "...", so we can only progress to the next line if the scope is empty
        </scopes>
 
   // Reached end of line
@@ -119,6 +121,32 @@ module SEMANTICS
   rule <cmd> Some(;) => None </cmd>
        <stack> ListItem(I:Int) L:List => L </stack>
        <output> O:List => ListItem(chrChar(I)) O </output>
+
+  // Function definition (which is also a call)
+  rule <cmd> Some((X:Id | CS:Commands)) => None </cmd>
+       <scopes>
+        (.Bag =>
+          <scope>
+            <noop> 0 </noop>
+            <ptr> 0 </ptr>
+            <commands> CS </commands>
+          </scope>
+        ) ...
+       </scopes>
+       <subroutines> M:Map => M[X <- CS] </subroutines>
+
+  // Function call
+  rule <cmd> Some((X:Id)) => None </cmd>
+       <subroutines> ( X |-> CS:Commands ) </subroutines>
+       <scopes>
+        (.Bag =>
+          <scope>
+            <noop> 0 </noop>
+            <ptr> 0 </ptr>
+            <commands> CS </commands>
+          </scope>
+        ) ...
+       </scopes>
 
   //// No-op
   //rule <line> _:Command => .Command ...</line>
