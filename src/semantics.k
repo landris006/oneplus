@@ -11,8 +11,16 @@ module SEMANTICS
   configuration
   <T>
     <k> $PGM:Lines </k>
-    <cmd> None </cmd> // The current command to evaluate
-    <ctx> .List </ctx>
+
+    <cmd> None </cmd> // The current command to be evaluated
+
+    <scopes>
+      <scope multiplicity="*" type="List">
+        <noop> 0 </noop>
+        <ptr> 0 </ptr>
+        <commands> .Commands </commands>
+      </scope>
+    </scopes>
     //<subroutines> .Map </subroutines>
     //<input> .List </input>
     <stack> .List </stack>
@@ -23,14 +31,43 @@ module SEMANTICS
 
   // Progress to next line
   rule <k> CS:Commands EOL => .K ...</k>    
-       <ctx> .List => ListItem(ctx(0, 0, CS)) ... </ctx>
+       <scopes>
+        (.Bag =>
+          <scope>
+            <noop> 0 </noop>
+            <ptr> 0 </ptr>
+            <commands> CS </commands>
+          </scope>
+        ) ...
+       </scopes>
 
   // Reached end of line
-  rule <ctx> ListItem(ctx(_, P:Int, CS:Commands)) => .List ... </ctx>
+  rule <scopes>
+        (<scope> ...
+          <commands> CS:Commands </commands>
+          <ptr> P:Int </ptr>
+        ... </scope>
+          =>
+        .Bag
+        ) ...
+       </scopes>
        requires P >=Int size(CS)
 
   // If <cmd> is empty, increment <ptr> and load the next command
-  rule <ctx> ListItem(ctx(I:Int, P:Int, CS:Commands)) => ListItem(ctx(I, P +Int 1, CS)) ... </ctx>
+  rule <scopes>
+        <scope>
+          <noop> N:Int </noop>
+          <ptr> P:Int </ptr>
+          <commands> CS:Commands </commands>
+        </scope>
+          =>
+        <scope>
+          <ptr> P +Int 1 </ptr>
+          <commands> CS:Commands </commands>
+          <noop> N </noop>
+        </scope>
+        ...
+       </scopes>
        <cmd> None => Some(at(P, CS)) </cmd>
        requires P >=Int 0 andBool P <Int size(CS)
 

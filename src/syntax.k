@@ -23,8 +23,6 @@ module SYNTAX
 
   syntax Cmd ::= Command
 
-  syntax Context ::= ctx(Int, Int, Commands) // noop, ptr, commands
-
   syntax Line ::= Commands "EOL"
   syntax Lines ::= List{Line,""}
 
