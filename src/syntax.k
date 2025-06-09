@@ -16,11 +16,14 @@ module SYNTAX
                     | ":" [token]
                     | ";" [token]
                     | "#"  [token]
+                    | "(" String "|" Commands ")" [token]
 
   syntax CommandOrComment
   syntax Commands ::= List{Command,""}
 
   syntax Cmd ::= Command
+
+  syntax Context ::= ctx(Int, Int, Commands) // noop, ptr, commands
 
   syntax Line ::= Commands "EOL"
   syntax Lines ::= List{Line,""}

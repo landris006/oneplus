@@ -12,32 +12,27 @@ module SEMANTICS
   <T>
     <k> $PGM:Lines </k>
     <cmd> None </cmd> // The current command to evaluate
-    <line> .Commands </line>
-    <ptr> 0 </ptr> // Pointer to the command we should load into <cmd>
-    <stack> .List </stack>
-    <noop>0</noop>
+    <ctx> .List </ctx>
     //<subroutines> .Map </subroutines>
     //<input> .List </input>
+    <stack> .List </stack>
     <output> .List </output>
   </T>
 
-  rule <k> L:Line LS:Lines => L ~> LS ...</k>
+  rule <k> L:Line LS:Lines => L ~> LS ... </k>
 
   // Progress to next line
   rule <k> CS:Commands EOL => .K ...</k>    
-       <line> .Commands => CS </line>
-       <ptr> _:Int => 0 </ptr>
+       <ctx> .List => ListItem(ctx(0, 0, CS)) ... </ctx>
 
   // Reached end of line
-  rule <line> CS:Commands => .Commands </line>  
-       <ptr> P:Int => -1 </ptr> 
+  rule <ctx> ListItem(ctx(_, P:Int, CS:Commands)) => .List ... </ctx>
        requires P >=Int size(CS)
 
   // If <cmd> is empty, increment <ptr> and load the next command
-  rule <line> CS:Commands </line>
-       <ptr> P:Int => P +Int 1 </ptr>
+  rule <ctx> ListItem(ctx(I:Int, P:Int, CS:Commands)) => ListItem(ctx(I, P +Int 1, CS)) ... </ctx>
        <cmd> None => Some(at(P, CS)) </cmd>
-       requires P >=Int 0
+       requires P >=Int 0 andBool P <Int size(CS)
 
   // --- CMD EVALUATIONS ---
 
