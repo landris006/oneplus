@@ -137,7 +137,7 @@ module SEMANTICS
 
   // Function call
   rule <cmd> Some((X:Id)) => None </cmd>
-       <subroutines> ( X |-> CS:Commands ) </subroutines>
+       <subroutines> ( X |-> CS:Commands ) ... </subroutines>
        <scopes>
         (.Bag =>
           <scope>
