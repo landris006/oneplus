@@ -9,7 +9,7 @@ module SYNTAX
                     | "*"
                     | "DUPLICATE"
                     | "/"
-                    | "\\"
+                    | "BACKSLASH"
                     | "^"
                     | "<"
                     | "."

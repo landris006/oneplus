@@ -7,6 +7,7 @@ module SEMANTICS
   imports INT
   imports BOOL
   imports STRING-COMMON
+  imports K-EQUAL
 
   configuration
   <T>
@@ -53,6 +54,7 @@ module SEMANTICS
         .Bag
         ) ...
        </scopes>
+       <cmd> None </cmd>
        requires P >=Int size(CS)
 
   // If <cmd> is empty, increment <ptr> and load the next command
@@ -96,7 +98,7 @@ module SEMANTICS
        <stack> ListItem(I:Int) L:List => L ListItem(I)  </stack>
 
   // Sends the bottom value to the top
-  rule <cmd> Some(\) => None </cmd>
+  rule <cmd> Some(BACKSLASH) => None </cmd>
        <stack> L:List ListItem(I:Int) => ListItem(I) L </stack>
 
   // Swaps the top two values
@@ -121,6 +123,70 @@ module SEMANTICS
   rule <cmd> Some(;) => None </cmd>
        <stack> ListItem(I:Int) L:List => L </stack>
        <output> O:List => ListItem(chrChar(I)) O </output>
+
+  // Set noop counter, reset ptr
+  rule <cmd> Some(#) => None </cmd>
+       <stack> ListItem(I:Int) L:List => L </stack>
+       <scopes>
+        <scope>
+          <noop> 0 </noop>
+          <ptr> _:Int </ptr>
+          <commands> CS:Commands </commands>
+        </scope>
+          =>
+        <scope>
+          <ptr> 0 </ptr>
+          <commands> CS:Commands </commands>
+          <noop> I +Int 1 </noop>
+        </scope>
+        ...
+       </scopes>
+
+  // Decrease noop counter
+  rule <cmd> Some(#) => None </cmd>
+       <scopes>
+        <scope>
+          <noop> N:Int </noop>
+          <ptr> P:Int </ptr>
+          <commands> CS:Commands </commands>
+        </scope>
+          =>
+        <scope>
+          <ptr> P </ptr>
+          <commands> CS </commands>
+          <noop> N -Int 1 </noop>
+        </scope>
+        ...
+       </scopes>
+        requires N >Int 0
+
+  // No-op
+  rule <cmd> Some(C:Command) => None </cmd>
+       <scopes>
+        <scope>
+          <noop> N:Int </noop>
+          <ptr> P:Int </ptr>
+          <commands> CS:Commands </commands>
+        </scope>
+       </scopes>
+       requires N >Int 0 andBool (C =/=K #) [priority(1)]
+    
+
+  // No-op
+  //rule <line> _:Command => .Command ...</line>
+  //     <noop> I:Int </noop> 
+  //      requires I >Int 0
+
+  //// Decrease the noop counter
+  //rule <line> # => .Command ...</line>
+  //     <noop> I:Int => I -Int 1 </noop>
+  //      requires I >Int 0
+
+  //// Sets the noop counter
+  //rule <line> # => .Command ...</line>
+  //     <stack> ListItem(I) L:List  => ListItem(I) L:List </stack>
+  //     <noop> C:Int => I +Int 1 </noop>
+  //     requires C <=Int 0
 
   // Function definition (which is also a call)
   rule <cmd> Some((X:Id | CS:Commands)) => None </cmd>
@@ -148,19 +214,5 @@ module SEMANTICS
         ) ...
        </scopes>
 
-  //// No-op
-  //rule <line> _:Command => .Command ...</line>
-  //     <noop> I:Int </noop> 
-  //      requires I >Int 0
-
-  //// Decrease the noop counter
-  //rule <line> # => .Command ...</line>
-  //     <noop> I:Int => I -Int 1 </noop>
-  //      requires I >Int 0
-
-  //// Sets the noop counter
-  //rule <line> # => .Command ...</line>
-  //     <stack> ListItem(I) L:List  => ListItem(I) L:List </stack>
-  //     <noop> C:Int => I +Int 1 </noop>
-  //     requires C <=Int 0
+  
 endmodule

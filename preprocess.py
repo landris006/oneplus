@@ -72,6 +72,8 @@ def transform(tok: str) -> str:
         return "ONE"
     if tok == '"':
         return "DUPLICATE"
+    if tok == "\\":
+        return "BACKSLASH"
     return tok
 
 
