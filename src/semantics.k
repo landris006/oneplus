@@ -77,6 +77,17 @@ module SEMANTICS
 
   // --- CMD EVALUATIONS ---
 
+  // No-op
+  rule <cmd> Some(C:Command) => None </cmd>
+       <scopes>
+        <scope>
+          ...
+          <noop> N:Int </noop>
+          ...
+        </scope>
+       </scopes>
+       requires N >Int 0 andBool (C =/=K #) [priority(1)]
+
   // Pushes 1 onto the stack
   rule <cmd> Some(ONE) => None </cmd>
        <stack> L:List => ListItem(1) L </stack>
@@ -159,34 +170,6 @@ module SEMANTICS
         ...
        </scopes>
         requires N >Int 0
-
-  // No-op
-  rule <cmd> Some(C:Command) => None </cmd>
-       <scopes>
-        <scope>
-          <noop> N:Int </noop>
-          <ptr> P:Int </ptr>
-          <commands> CS:Commands </commands>
-        </scope>
-       </scopes>
-       requires N >Int 0 andBool (C =/=K #) [priority(1)]
-    
-
-  // No-op
-  //rule <line> _:Command => .Command ...</line>
-  //     <noop> I:Int </noop> 
-  //      requires I >Int 0
-
-  //// Decrease the noop counter
-  //rule <line> # => .Command ...</line>
-  //     <noop> I:Int => I -Int 1 </noop>
-  //      requires I >Int 0
-
-  //// Sets the noop counter
-  //rule <line> # => .Command ...</line>
-  //     <stack> ListItem(I) L:List  => ListItem(I) L:List </stack>
-  //     <noop> C:Int => I +Int 1 </noop>
-  //     requires C <=Int 0
 
   // Function definition (which is also a call)
   rule <cmd> Some((X:Id | CS:Commands)) => None </cmd>
