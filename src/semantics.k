@@ -31,6 +31,7 @@ module SEMANTICS
   </T>
 
   rule <k> L:Line LS:Lines => L ~> LS ... </k>
+  rule <k> .Lines => .K ... </k>
 
   // Progress to next line
   rule <k> CS:Commands EOL => .K ...</k>    
@@ -196,6 +197,4 @@ module SEMANTICS
           </scope>
         ) ...
        </scopes>
-
-  
 endmodule
