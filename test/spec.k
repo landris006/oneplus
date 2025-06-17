@@ -13,7 +13,6 @@ module VERIFICATION
     imports SEMANTICS
     imports MAP-SYMBOLIC
     imports UTILS
-
 endmodule
 
 module SPEC
@@ -33,9 +32,47 @@ imports UTILS
     requires N ==Int 0
 
   claim
-    <k> ONE .Commands EOL .Lines ~> .K => .K </k>
+    <k> ONE EOL => .K </k>
     <cmd> None </cmd>
     <scopes> .Bag </scopes>
 
-    <stack> .List => ListItem(1) ... </stack>
+    <stack> .List => ListItem(1) </stack>
+
+  claim
+    <k> ONE ONE + EOL => .K </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+    <stack> .List => ListItem(2) </stack>
+
+  claim
+    <k> ONE + EOL => .K </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+    <stack> ListItem(1) => ListItem(2) </stack>
+
+  claim
+    <k> ONE + EOL => .K </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+    <stack> ListItem(N:Int) => ListItem(N +Int 1) </stack>
+
+  claim
+    <k> + EOL => .K </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+    <stack> ListItem(N:Int) ListItem(N:Int) => ListItem(N *Int 2) </stack>
+
+  claim
+    <k> < EOL => .K </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+    <stack> ListItem(_:Int) ListItem(_:Int) => ListItem(?R) </stack>
+    ensures (?R ==Int 0) orBool (?R ==Int 1)
+
+  claim
+    <k> < EOL => .K </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+    <stack> ListItem(_A:Int) ListItem(_B:Int) => ListItem(?R) </stack>
+    ensures (?A <Int ?B impliesBool ?R ==Int 0) andBool (?A >=Int ?B impliesBool ?R ==Int 1)
 endmodule
