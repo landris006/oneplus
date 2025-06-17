@@ -4,7 +4,7 @@
 
 Formalization of the `1+` esoteric programming language utilizing the K Framework.
 
-<div>
+<pre>
 11+"""1+"****;
 11"+"""**+"*+;
 11"++""+"**";;
@@ -16,7 +16,7 @@ Formalization of the `1+` esoteric programming language utilizing the K Framewor
 11"++""""+"**++;
 11"++""+"**;
 11+"""**+"*;
-</div>
+</pre>
 
 ## Usage
 
