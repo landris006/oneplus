@@ -1,6 +1,5 @@
 module SYNTAX
   imports INT-SYNTAX
-  imports STRING-SYNTAX
   imports LIST
   imports ID-SYNTAX
 
@@ -22,11 +21,6 @@ module SYNTAX
   
   syntax Commands ::= List{Command,""}
 
-  syntax Cmd ::= Command
-
   syntax Line ::= Commands "EOL"
   syntax Lines ::= List{Line,""}
-
-  syntax Comment ::= "[" String "]"
 endmodule
-
