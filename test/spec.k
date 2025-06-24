@@ -39,6 +39,13 @@ imports UTILS
     <stack> .List => ListItem(1) </stack>
 
   claim
+    <k> ONE EOL => .K ... </k>
+    <cmd> None </cmd>
+    <scopes> .Bag </scopes>
+
+    <stack> .List => ListItem(1) </stack> [one-path]
+
+  claim
     <k> ONE ONE + EOL => .K </k>
     <cmd> None </cmd>
     <scopes> .Bag </scopes>
